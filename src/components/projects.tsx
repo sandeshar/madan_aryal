@@ -1,6 +1,6 @@
 const Projects = () => {
     return (
-        <div className="min-h-screen flex flex-col items-center justify-center p-10">
+        <div className="min-h-screen flex md:flex-col items-center justify-center p-10">
             <div></div>
             <div></div>
         </div>
