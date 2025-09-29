@@ -1,8 +1,24 @@
 @import "tailwindcss";
 
+
 body {
-    background-color: black;
+    background-color: #050406;
     color: white;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background-image: radial-gradient(600px 600px at 10% 10%, rgba(255,90,70,0.06), transparent 10%),
+                      radial-gradient(500px 500px at 90% 80%, rgba(63,94,251,0.04), transparent 15%),
+                      linear-gradient(180deg, rgba(8,7,10,1), rgba(12,11,16,1));
+    background-attachment: fixed;
+    position: relative;
+    overflow-x: hidden;
+}
+
+/* Smooth scrolling for in-page links and reserve space for the fixed navbar */
+html {
+    scroll-behavior: smooth;
+    /* If your navbar height differs, adjust this value (e.g. 4rem, 5rem) */
+    scroll-padding-top: 4.5rem;
 }
 
 .typewriter {
@@ -10,9 +26,9 @@ body {
     overflow: hidden;
     border-right: 0.15em solid orange;
     white-space: nowrap;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.04em;
     animation: typing 3.5s steps(20) infinite alternate, blink-caret 0.75s step-end infinite;
-    font-family: monospace;
+    font-family: var(--font-geist-mono), monospace;
 }
 
 /* Typing effect */
@@ -21,12 +37,9 @@ body {
         width: 2ch;
     }
 
-    /* start hidden */
     to {
         width: 20ch;
     }
-
-    /* full text */
 }
 
 /* Blinking cursor */
@@ -40,4 +53,68 @@ body {
     50% {
         border-color: orange;
     }
+}
+
+/* Glass card utility */
+.glass {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01));
+    border: 1px solid rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(6px);
+}
+
+/* CTA gradient */
+.cta-gradient {
+    background: linear-gradient(90deg, #ff8c42 0%, #ff3ca6 100%);
+}
+
+/* Small helpers */
+.accent-glow {
+    box-shadow: 0 8px 30px rgba(255, 92, 70, 0.12);
+}
+
+/* animated subtle gradient layer */
+.animated-gradient {
+    position: fixed;
+    inset: -20%;
+    z-index: 0;
+    background: linear-gradient(120deg, rgba(255,140,66,0.06) 0%, rgba(255,60,166,0.05) 35%, rgba(63,94,251,0.04) 70%, rgba(14,165,233,0.03) 100%);
+    filter: blur(60px);
+    transform: translateZ(0);
+    animation: float-gradient 12s ease-in-out infinite;
+    pointer-events: none;
+}
+
+@keyframes float-gradient {
+    0% { transform: translate3d(-5%, -2%, 0) scale(1); }
+    50% { transform: translate3d(5%, 2%, 0) scale(1.02); }
+    100% { transform: translate3d(-5%, -2%, 0) scale(1); }
+}
+
+/* Hero image floating animation */
+.hero-image-floating {
+    animation: floaty 6s ease-in-out infinite;
+    will-change: transform;
+}
+
+@keyframes floaty {
+    0% { transform: translateY(0) rotate(-1deg); }
+    50% { transform: translateY(-10px) rotate(1deg); }
+    100% { transform: translateY(0) rotate(-1deg); }
+}
+
+/* Gradient name style */
+.name-gradient {
+    background: linear-gradient(90deg,#fff 0%, #ffd1b6 20%, #ff8c42 45%, #ff3ca6 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+/* CTA button common */
+.btn-cta {
+    display: inline-block;
+    padding: 0.6rem 1.1rem;
+    border-radius: 999px;
+    font-weight: 700;
+    box-shadow: 0 8px 30px rgba(255, 92, 70, 0.12);
 }
