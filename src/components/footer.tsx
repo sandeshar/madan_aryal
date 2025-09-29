@@ -6,12 +6,10 @@ const Footer = () => {
     return (
         <footer className="w-full bg-gray-950 text-gray-300 py-8 px-6 border-t border-gray-800">
             <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
-                {/* Left */}
                 <p className="text-sm md:text-base">
                     &copy; {new Date().getFullYear()} <span className="font-bold text-white">Madan Aryal</span>. All rights reserved.
                 </p>
 
-                {/* Center */}
                 <p className="text-sm md:text-base">
                     Built by{" "}
                     <Link
@@ -22,7 +20,6 @@ const Footer = () => {
                     </Link>
                 </p>
 
-                {/* Right - Social Icons */}
                 <div className="flex gap-5">
                     <Link
                         href="https://facebook.com/yourprofile"
