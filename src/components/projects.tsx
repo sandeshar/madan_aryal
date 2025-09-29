@@ -1,3 +1,8 @@
+'use client';
+import { fadeUp } from "@/utils/animations";
+import React from "react";
+import { motion } from "framer-motion";
+
 const Projects: React.FC = () => {
     const images: string[] = [
         "https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image.jpg",
@@ -16,12 +21,13 @@ const Projects: React.FC = () => {
 
     return (
         <div className="min-h-screen flex flex-col items-center justify-center p-10">
-            <h1 className="text-5xl font-bold text-center mb-12">Projects</h1>
+            <motion.h1 className="text-5xl font-bold text-center mb-12" {...fadeUp}>Projects</motion.h1>
 
             <div className="columns-2 md:columns-4 gap-4 space-y-4 py-14">
                 {images.map((src, index) => (
-                    <img
+                    <motion.img
                         key={index}
+                        {...fadeUp}
                         className="w-full rounded-lg hover:scale-105 duration-300"
                         src={src}
                         alt={`gallery-${index}`}
