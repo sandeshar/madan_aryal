@@ -1,5 +1,6 @@
 "use client";
 import { motion } from "framer-motion";
+import { slideLeft, slideRight, btnInteraction } from "@/utils/animations";
 import { FaGithub, FaLinkedin, FaTwitter, FaFacebook, FaInstagram } from "react-icons/fa";
 
 const Contact = () => {
@@ -9,13 +10,7 @@ const Contact = () => {
             <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12">
 
                 {/* Left Side - Contact Info */}
-                <motion.div
-                    initial={{ opacity: 0, x: -50 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.8 }}
-                    viewport={{ once: true }}
-                    className="flex flex-col justify-center gap-6"
-                >
+                <motion.div {...slideLeft} className="flex flex-col justify-center gap-6">
                     <h2 className="text-4xl md:text-5xl font-extrabold bg-gradient-to-r from-orange-400 to-pink-500 bg-clip-text text-transparent">
                         Get in Touch
                     </h2>
@@ -57,13 +52,7 @@ const Contact = () => {
                 </motion.div>
 
                 {/* Right Side - Contact Form */}
-                <motion.form
-                    initial={{ opacity: 0, x: 50 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.8 }}
-                    viewport={{ once: true }}
-                    className="bg-gray-900/70 backdrop-blur-md rounded-2xl p-8 shadow-lg border border-gray-700 flex flex-col gap-6"
-                >
+                <motion.form {...slideRight} className="bg-gray-900/70 backdrop-blur-md rounded-2xl p-8 shadow-lg border border-gray-700 flex flex-col gap-6">
                     <div>
                         <label className="block mb-2 text-sm font-semibold">Name</label>
                         <input
@@ -91,12 +80,7 @@ const Contact = () => {
                         ></textarea>
                     </div>
 
-                    <motion.button
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                        type="submit"
-                        className="w-full py-3 bg-gradient-to-r from-orange-500 to-pink-500 rounded-lg font-bold shadow-lg hover:shadow-orange-500/50 transition"
-                    >
+                    <motion.button {...btnInteraction} type="submit" className="w-full py-3 bg-gradient-to-r from-orange-500 to-pink-500 rounded-lg font-bold shadow-lg hover:shadow-orange-500/50 transition">
                         Send Message
                     </motion.button>
                 </motion.form>
