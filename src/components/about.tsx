@@ -1,14 +1,11 @@
-'use client';
 import Image from "next/image";
-import { motion } from "framer-motion";
-import { fadeUp, heroLeft, heroRight } from "@/utils/animations";
 
 const About = () => {
     return (
         <div className="md:flex md:flex-col items-center justify-center py-28 px-10 overflow-hidden">
-            <motion.h1 {...fadeUp} className="text-5xl font-bold text-center mb-12">About Me</motion.h1>
+            <h1 className="text-5xl font-bold text-center mb-12">About Me</h1>
             <div className="md:flex">
-                <motion.div {...heroLeft} className="my-8 md:my-0 md:mx-8 md:w-1/3 ">
+                <div className="my-8 md:my-0 md:mx-8 md:w-1/3 ">
                     <Image
                         src="/madan.png"
                         alt="Your Name"
@@ -16,8 +13,8 @@ const About = () => {
                         height={400}
                         className="rounded-full"
                     />
-                </motion.div>
-                <motion.div {...heroRight} className="md:mt-4 md:w-2/3 text-justify text-lg">
+                </div>
+                <div className="md:mt-4 md:w-2/3 text-justify text-lg">
                     <p>
                         Hi, I&apos;m Madan Aryal, a graphic designer at Sunrise Graphics and a freelance designer. I create visually compelling designs that help brands stand out and connect with their audience.
                     </p>
@@ -36,7 +33,7 @@ const About = () => {
                     <p>
                         I&apos;m proficient with Adobe Creative Suite, Figma, and Canva, and I manage multiple projects while meeting deadlines to deliver high-quality visuals.
                     </p>
-                </motion.div>
+                </div>
             </div>
         </div>
     );
