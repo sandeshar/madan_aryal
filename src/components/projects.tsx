@@ -1,21 +1,40 @@
-const Projects = () => {
+'use client';
+import { fadeUp } from "@/utils/animations";
+import React from "react";
+import { motion } from "framer-motion";
+
+const Projects: React.FC = () => {
+    const images: string[] = [
+        "https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image.jpg",
+        "https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-1.jpg",
+        "https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-2.jpg",
+        "https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-3.jpg",
+        "https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-4.jpg",
+        "https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-5.jpg",
+        "https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-6.jpg",
+        "https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-7.jpg",
+        "https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-8.jpg",
+        "https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-9.jpg",
+        "https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-10.jpg",
+        "https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-11.jpg",
+    ];
+
     return (
-        <div className="min-h-screen flex md:flex-col items-center justify-center p-10">
-            <h1 className="text-4xl md:text-6xl font-extrabold mb-10">Projects</h1>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div className="bg-white rounded-lg shadow-md p-6">
-                    <h2 className="text-2xl font-bold mb-4">Project Title 1</h2>
-                    <p className="text-gray-700">
-                        Brief description of the project goes here. Highlight key features and technologies used.
-                    </p>
-                </div>
-                <div className="bg-white rounded-lg shadow-md p-6">
-                    <h2 className="text-2xl font-bold mb-4">Project Title 2</h2>
-                    <p className="text-gray-700">
-                        Brief description of the project goes here. Highlight key features and technologies used.
-                    </p>
-                </div>
+        <div className="min-h-screen flex flex-col items-center justify-center p-10">
+            <motion.h1 className="text-5xl font-bold text-center mb-12" {...fadeUp}>Projects</motion.h1>
+
+            <div className="columns-2 md:columns-4 gap-4 space-y-4 py-14">
+                {images.map((src, index) => (
+                    <motion.img
+                        key={index}
+                        {...fadeUp}
+                        className="w-full rounded-lg hover:scale-105 duration-300"
+                        src={src}
+                        alt={`gallery-${index}`}
+                    />
+                ))}
             </div>
+
         </div>
     );
 };
