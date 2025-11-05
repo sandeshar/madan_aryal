@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Madan Aryal",
-  description: "pPersonal Portfolio of Madan Aryal",
+  description: "Personal Portfolio of Madan Aryal",
 };
 
 export default function RootLayout({
