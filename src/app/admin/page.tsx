@@ -26,62 +26,62 @@ const AdminPage: React.FC = () => {
         tags: '',
     });
 
-  // Fetch projects
-  const fetchProjects = async () => {
-    try {
-      const response = await fetch('/api/projects');
-      const data = await response.json();
-      setProjects(data.projects || []);
-    } catch (error) {
-      console.error('Error fetching projects:', error);
-      alert('Failed to load projects');
-    }
-  };    useEffect(() => {
+    // Fetch projects
+    const fetchProjects = async () => {
+        try {
+            const response = await fetch('/api/projects');
+            const data = await response.json();
+            setProjects(data.projects || []);
+        } catch (error) {
+            console.error('Error fetching projects:', error);
+            alert('Failed to load projects');
+        }
+    }; useEffect(() => {
         fetchProjects();
     }, []);
 
-  // Handle file upload
-  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
+    // Handle file upload
+    const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
 
-    // Validate file type
-    if (!file.type.startsWith('image/')) {
-      alert('Please select an image file');
-      return;
-    }
+        // Validate file type
+        if (!file.type.startsWith('image/')) {
+            alert('Please select an image file');
+            return;
+        }
 
-    // Validate file size (max 5MB)
-    if (file.size > 5 * 1024 * 1024) {
-      alert('File size must be less than 5MB');
-      return;
-    }
+        // Validate file size (max 5MB)
+        if (file.size > 5 * 1024 * 1024) {
+            alert('File size must be less than 5MB');
+            return;
+        }
 
-    setUploading(true);
-    const formData = new FormData();
-    formData.append('file', file);
+        setUploading(true);
+        const formData = new FormData();
+        formData.append('file', file);
 
-    try {
-      const response = await fetch('/api/upload', {
-        method: 'POST',
-        body: formData,
-      });
+        try {
+            const response = await fetch('/api/upload', {
+                method: 'POST',
+                body: formData,
+            });
 
-      const data = await response.json();
-      if (data.success) {
-        setFormData(prev => ({ ...prev, imageUrl: data.url }));
-        alert('Image uploaded successfully!');
-      } else {
-        alert(`Failed to upload image: ${data.error || 'Unknown error'}`);
-        console.error('Upload error:', data);
-      }
-    } catch (error) {
-      console.error('Error uploading file:', error);
-      alert(`Failed to upload image: ${error}`);
-    } finally {
-      setUploading(false);
-    }
-  };    // Handle form submission
+            const data = await response.json();
+            if (data.success) {
+                setFormData(prev => ({ ...prev, imageUrl: data.url }));
+                alert('Image uploaded successfully!');
+            } else {
+                alert(`Failed to upload image: ${data.error || 'Unknown error'}`);
+                console.error('Upload error:', data);
+            }
+        } catch (error) {
+            console.error('Error uploading file:', error);
+            alert(`Failed to upload image: ${error}`);
+        } finally {
+            setUploading(false);
+        }
+    };    // Handle form submission
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
