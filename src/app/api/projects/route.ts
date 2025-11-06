@@ -7,10 +7,14 @@ const PROJECTS_FILE = path.join(process.cwd(), 'data', 'projects.json');
 
 // Ensure data directory exists
 async function ensureDataDir() {
+  try {
     const dataDir = path.join(process.cwd(), 'data');
     if (!existsSync(dataDir)) {
-        await mkdir(dataDir, { recursive: true });
+      await mkdir(dataDir, { recursive: true });
     }
+  } catch (error) {
+    console.error('Error ensuring data directory:', error);
+  }
 }
 
 // Get all projects

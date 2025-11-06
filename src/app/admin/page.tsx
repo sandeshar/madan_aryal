@@ -26,52 +26,62 @@ const AdminPage: React.FC = () => {
         tags: '',
     });
 
-    // Fetch projects
-    const fetchProjects = async () => {
-        try {
-            const response = await fetch('/api/projects');
-            const data = await response.json();
-            setProjects(data.projects || []);
-        } catch (error) {
-            console.error('Error fetching projects:', error);
-        }
-    };
-
-    useEffect(() => {
+  // Fetch projects
+  const fetchProjects = async () => {
+    try {
+      const response = await fetch('/api/projects');
+      const data = await response.json();
+      setProjects(data.projects || []);
+    } catch (error) {
+      console.error('Error fetching projects:', error);
+      alert('Failed to load projects');
+    }
+  };    useEffect(() => {
         fetchProjects();
     }, []);
 
-    // Handle file upload
-    const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0];
-        if (!file) return;
+  // Handle file upload
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
 
-        setUploading(true);
-        const formData = new FormData();
-        formData.append('file', file);
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      alert('Please select an image file');
+      return;
+    }
 
-        try {
-            const response = await fetch('/api/upload', {
-                method: 'POST',
-                body: formData,
-            });
+    // Validate file size (max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      alert('File size must be less than 5MB');
+      return;
+    }
 
-            const data = await response.json();
-            if (data.success) {
-                setFormData(prev => ({ ...prev, imageUrl: data.url }));
-                alert('Image uploaded successfully!');
-            } else {
-                alert('Failed to upload image');
-            }
-        } catch (error) {
-            console.error('Error uploading file:', error);
-            alert('Failed to upload image');
-        } finally {
-            setUploading(false);
-        }
-    };
+    setUploading(true);
+    const formData = new FormData();
+    formData.append('file', file);
 
-    // Handle form submission
+    try {
+      const response = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        setFormData(prev => ({ ...prev, imageUrl: data.url }));
+        alert('Image uploaded successfully!');
+      } else {
+        alert(`Failed to upload image: ${data.error || 'Unknown error'}`);
+        console.error('Upload error:', data);
+      }
+    } catch (error) {
+      console.error('Error uploading file:', error);
+      alert(`Failed to upload image: ${error}`);
+    } finally {
+      setUploading(false);
+    }
+  };    // Handle form submission
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
@@ -206,13 +216,16 @@ const AdminPage: React.FC = () => {
                                     Image URL (or upload above) *
                                 </label>
                                 <input
-                                    type="url"
+                                    type="text"
                                     required
                                     value={formData.imageUrl}
                                     onChange={(e) => setFormData({ ...formData, imageUrl: e.target.value })}
                                     className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
-                                    placeholder="https://example.com/image.jpg"
+                                    placeholder="https://example.com/image.jpg or /uploads/image.jpg"
                                 />
+                                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                                    Either upload an image above or paste a URL here
+                                </p>
                             </div>
 
                             <div>
@@ -220,7 +233,7 @@ const AdminPage: React.FC = () => {
                                     Project Link
                                 </label>
                                 <input
-                                    type="url"
+                                    type="text"
                                     value={formData.link}
                                     onChange={(e) => setFormData({ ...formData, link: e.target.value })}
                                     className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
