@@ -31,7 +31,7 @@ export async function GET() {
         return NextResponse.json({ projects });
     } catch (error) {
         console.error('Error reading projects:', error);
-        return NextResponse.json({ projects: [] });
+        return NextResponse.json({ projects: [], error: String(error) }, { status: 500 });
     }
 }
 
@@ -78,7 +78,7 @@ export async function POST(request: NextRequest) {
     } catch (error) {
         console.error('Error adding project:', error);
         return NextResponse.json(
-            { error: 'Failed to add project' },
+            { error: `Failed to add project: ${String(error)}` },
             { status: 500 }
         );
     }
@@ -115,7 +115,7 @@ export async function DELETE(request: NextRequest) {
     } catch (error) {
         console.error('Error deleting project:', error);
         return NextResponse.json(
-            { error: 'Failed to delete project' },
+            { error: `Failed to delete project: ${String(error)}` },
             { status: 500 }
         );
     }

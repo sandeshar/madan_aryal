@@ -1,6 +1,7 @@
 'use client';
 import React, { useState, useEffect } from 'react';
-import { FiUpload, FiTrash2, FiPlus, FiX } from 'react-icons/fi';
+import { FiUpload, FiTrash2, FiPlus, FiX, FiEdit2, FiSave } from 'react-icons/fi';
+import Toast from '@/components/toast';
 
 interface Project {
     id: string;
@@ -12,11 +13,19 @@ interface Project {
     createdAt: string;
 }
 
+interface ToastState {
+    show: boolean;
+    message: string;
+    type: 'success' | 'error' | 'warning';
+}
+
 const AdminPage: React.FC = () => {
     const [projects, setProjects] = useState<Project[]>([]);
     const [showForm, setShowForm] = useState(false);
     const [loading, setLoading] = useState(false);
     const [uploading, setUploading] = useState(false);
+    const [editingId, setEditingId] = useState<string | null>(null);
+    const [toast, setToast] = useState<ToastState>({ show: false, message: '', type: 'success' });
 
     const [formData, setFormData] = useState({
         title: '',
@@ -26,6 +35,10 @@ const AdminPage: React.FC = () => {
         tags: '',
     });
 
+    const showToast = (message: string, type: 'success' | 'error' | 'warning') => {
+        setToast({ show: true, message, type });
+    };
+
     // Fetch projects
     const fetchProjects = async () => {
         try {
@@ -34,7 +47,7 @@ const AdminPage: React.FC = () => {
             setProjects(data.projects || []);
         } catch (error) {
             console.error('Error fetching projects:', error);
-            alert('Failed to load projects');
+            showToast('Failed to load projects', 'error');
         }
     }; useEffect(() => {
         fetchProjects();
@@ -70,20 +83,32 @@ const AdminPage: React.FC = () => {
             const data = await response.json();
             if (data.success) {
                 setFormData(prev => ({ ...prev, imageUrl: data.url }));
-                alert('Image uploaded successfully!');
+                showToast('Image uploaded successfully!', 'success');
             } else {
-                alert(`Failed to upload image: ${data.error || 'Unknown error'}`);
+                showToast(`Failed to upload image: ${data.error || 'Unknown error'}`, 'error');
                 console.error('Upload error:', data);
             }
         } catch (error) {
             console.error('Error uploading file:', error);
-            alert(`Failed to upload image: ${error}`);
+            showToast(`Failed to upload image: ${error}`, 'error');
         } finally {
             setUploading(false);
         }
     };    // Handle form submission
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+
+        // Validate required fields
+        if (!formData.title.trim()) {
+            showToast('Please enter a project title', 'warning');
+            return;
+        }
+
+        if (!formData.imageUrl.trim()) {
+            showToast('Please upload an image or enter an image URL', 'warning');
+            return;
+        }
+
         setLoading(true);
 
         try {
@@ -100,16 +125,17 @@ const AdminPage: React.FC = () => {
 
             const data = await response.json();
             if (data.success) {
-                alert('Project added successfully!');
+                showToast('Project added successfully!', 'success');
                 setFormData({ title: '', description: '', imageUrl: '', link: '', tags: '' });
                 setShowForm(false);
                 fetchProjects();
             } else {
-                alert('Failed to add project');
+                showToast(`Failed to add project: ${data.error || 'Unknown error'}`, 'error');
+                console.error('Add project error:', data);
             }
         } catch (error) {
             console.error('Error adding project:', error);
-            alert('Failed to add project');
+            showToast(`Failed to add project: ${error}`, 'error');
         } finally {
             setLoading(false);
         }
@@ -126,20 +152,71 @@ const AdminPage: React.FC = () => {
 
             const data = await response.json();
             if (data.success) {
-                alert('Project deleted successfully!');
+                showToast('Project deleted successfully!', 'success');
                 fetchProjects();
             } else {
-                alert('Failed to delete project');
+                showToast(`Failed to delete project: ${data.error || 'Unknown error'}`, 'error');
             }
         } catch (error) {
             console.error('Error deleting project:', error);
-            alert('Failed to delete project');
+            showToast(`Failed to delete project: ${error}`, 'error');
         }
     };
 
     return (
         <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-8">
+            {toast.show && (
+                <Toast
+                    message={toast.message}
+                    type={toast.type}
+                    onClose={() => setToast({ ...toast, show: false })}
+                />
+            )}
+
             <div className="max-w-7xl mx-auto">
+                {/* Statistics Cards */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+                        <div className="flex items-center justify-between">
+                            <div>
+                                <p className="text-sm text-gray-500 dark:text-gray-400">Total Projects</p>
+                                <p className="text-3xl font-bold text-gray-900 dark:text-white">{projects.length}</p>
+                            </div>
+                            <div className="p-3 bg-blue-100 dark:bg-blue-900 rounded-full">
+                                <FiUpload className="text-blue-600 dark:text-blue-400" size={24} />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+                        <div className="flex items-center justify-between">
+                            <div>
+                                <p className="text-sm text-gray-500 dark:text-gray-400">Total Tags</p>
+                                <p className="text-3xl font-bold text-gray-900 dark:text-white">
+                                    {new Set(projects.flatMap(p => p.tags)).size}
+                                </p>
+                            </div>
+                            <div className="p-3 bg-green-100 dark:bg-green-900 rounded-full">
+                                <FiEdit2 className="text-green-600 dark:text-green-400" size={24} />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+                        <div className="flex items-center justify-between">
+                            <div>
+                                <p className="text-sm text-gray-500 dark:text-gray-400">With Links</p>
+                                <p className="text-3xl font-bold text-gray-900 dark:text-white">
+                                    {projects.filter(p => p.link).length}
+                                </p>
+                            </div>
+                            <div className="p-3 bg-purple-100 dark:bg-purple-900 rounded-full">
+                                <FiSave className="text-purple-600 dark:text-purple-400" size={24} />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <div className="flex justify-between items-center mb-8">
                     <h1 className="text-4xl font-bold text-gray-900 dark:text-white">
                         Project Management
