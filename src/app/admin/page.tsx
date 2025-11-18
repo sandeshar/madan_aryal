@@ -24,7 +24,6 @@ const AdminPage: React.FC = () => {
     const [showForm, setShowForm] = useState(false);
     const [loading, setLoading] = useState(false);
     const [uploading, setUploading] = useState(false);
-    const [editingId, setEditingId] = useState<string | null>(null);
     const [toast, setToast] = useState<ToastState>({ show: false, message: '', type: 'success' });
 
     const [formData, setFormData] = useState({
@@ -49,8 +48,11 @@ const AdminPage: React.FC = () => {
             console.error('Error fetching projects:', error);
             showToast('Failed to load projects', 'error');
         }
-    }; useEffect(() => {
+    };
+
+    useEffect(() => {
         fetchProjects();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     // Handle file upload

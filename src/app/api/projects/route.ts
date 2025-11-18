@@ -107,7 +107,7 @@ export async function DELETE(request: NextRequest) {
         const data = await readFile(PROJECTS_FILE, 'utf-8');
         let projects = JSON.parse(data);
 
-        projects = projects.filter((p: any) => p.id !== id);
+        projects = projects.filter((p: { id: string }) => p.id !== id);
 
         await writeFile(PROJECTS_FILE, JSON.stringify(projects, null, 2));
 
